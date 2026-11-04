@@ -306,7 +306,7 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
   gap: 16px;
-  align-items: stretch;
+  align-items: start;
 }
 
 .tile {
@@ -386,7 +386,7 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   display: block;
   margin-top: 8px;
   padding-left: 11px;
-  border-left: 2px solid currentColor;
+  border-left: 2px dotted currentColor;
   font-size: 0.9rem;
   line-height: 1.5;
   color: var(--muted);
@@ -430,7 +430,7 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   background: var(--mark-bg);
   color: inherit;
   padding: 0 0.08em;
-  box-shadow: inset 2px 0 0 var(--fg);
+  border-bottom: 2px dotted var(--fg);
 }
 
 .tile-content figure {
