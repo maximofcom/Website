@@ -182,6 +182,53 @@
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     if ('inert' in body) body.inert = !open;
   }
+  /* ---------------- Раскладка плиток ---------------- */
+  /* Плитки стоят плотной кладкой: каждая попадает в самую короткую колонку,
+     высота задаётся содержимым плитки, поэтому пустых промежутков не остаётся. */
+
+  var LAYOUT_GAP = 16; /* вертикальный зазор между плитками, px */
+  var LAYOUT_ROW = 2;  /* шаг служебных строк сетки, px (совпадает с CSS) */
+
+  function layoutTiles(reuseColumns) {
+    var tiles = Array.prototype.slice.call(grid.querySelectorAll('.tile'));
+    if (!tiles.length) return;
+
+    var template = window.getComputedStyle(grid).gridTemplateColumns;
+    var columns = template ? template.split(' ').filter(Boolean).length : 1;
+    if (!columns) columns = 1;
+
+    var heights = [];
+    var sizes = [];
+    var i;
+    for (i = 0; i < columns; i++) heights.push(0);
+    for (i = 0; i < tiles.length; i++) sizes.push(tiles[i].getBoundingClientRect().height);
+
+    for (i = 0; i < tiles.length; i++) {
+      var span = Math.max(1, Math.ceil((sizes[i] + LAYOUT_GAP) / LAYOUT_ROW));
+      var column = 0;
+      if (reuseColumns && tiles[i].dataset.col) {
+        column = Math.min(columns - 1, Number(tiles[i].dataset.col) || 0);
+      } else {
+        for (var c = 1; c < columns; c++) {
+          if (heights[c] < heights[column]) column = c;
+        }
+        tiles[i].dataset.col = String(column);
+      }
+      var rowStart = Math.round(heights[column] / LAYOUT_ROW) + 1;
+      tiles[i].style.gridColumn = String(column + 1);
+      tiles[i].style.gridRow = rowStart + ' / span ' + span;
+      heights[column] = (rowStart - 1 + span) * LAYOUT_ROW;
+    }
+  }
+
+  function animateLayout(duration) {
+    var start = window.performance.now();
+    function step(now) {
+      layoutTiles(true);
+      if (now - start < duration) window.requestAnimationFrame(step);
+    }
+    window.requestAnimationFrame(step);
+  }
 
   if (grid && data && data.chapters && data.chapters.length) {
     var fragment = document.createDocumentFragment();
@@ -195,9 +242,22 @@
       var body = tile.querySelector('.tile-body');
       if (body && 'inert' in body) body.inert = true;
       toggle.addEventListener('click', function () {
-        setChapterOpen(tile, toggle, body, !tile.classList.contains('is-open'));
+        var open = !tile.classList.contains('is-open');
+        setChapterOpen(tile, toggle, body, open);
+        animateLayout(420);
       });
     });
+
+    layoutTiles(false);
+    var resizeTimer = 0;
+    window.addEventListener('resize', function () {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(function () { layoutTiles(false); }, 120);
+    });
+    Array.prototype.forEach.call(grid.querySelectorAll('img'), function (image) {
+      image.addEventListener('load', function () { layoutTiles(true); });
+    });
+    window.addEventListener('load', function () { layoutTiles(false); });
 
     if (stats) {
       stats.textContent = data.chapters.length + ' ' + plural(data.chapters.length, ['глава', 'главы', 'глав']) + ', нажмите на плитку, чтобы развернуть главу';

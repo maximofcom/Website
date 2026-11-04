@@ -305,7 +305,9 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
 .chapters {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
-  gap: 16px;
+  column-gap: 16px;
+  row-gap: 0;
+  grid-auto-rows: 2px;
   align-items: start;
 }
 
