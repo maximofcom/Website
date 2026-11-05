@@ -33,6 +33,10 @@
     return new URL('./', window.location.href).href;
   }
 
+  /* Абсолютный путь к корню сайта: нужен для ресурсов из файлов данных
+     (например, картинок), потому что глубина страниц ru/ и корня различается. */
+  window.SITE_ROOT = siteRoot();
+
   function browserLanguage() {
     var list = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || ''];
     for (var i = 0; i < list.length; i++) {

@@ -106,10 +106,17 @@
     return wrapper;
   }
 
+  function assetUrl(path) {
+    if (!path) return '';
+    if (/^(https?:)?\/\//i.test(path) || path.charAt(0) === '/') return path;
+    var base = window.SITE_ROOT || './';
+    return new URL(path, base).href;
+  }
+
   function buildFigure(block) {
     var figure = document.createElement('figure');
     var image = document.createElement('img');
-    image.src = block.src;
+    image.src = assetUrl(block.src);
     image.alt = block.alt || '';
     image.loading = 'lazy';
     image.decoding = 'async';
