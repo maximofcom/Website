@@ -1,24 +1,21 @@
 /*
- * langs.js - реестр языков сайта и определение языка посетителя.
+ * langs.js - language registry and visitor language detection.
  *
- * Как добавить язык:
- *   1. создайте папку /код/ и положите туда копию index.html;
- *   2. переведите книгу в файл assets/js/data.код.js;
- *   3. добавьте запись в массив LANGS (например: en, English, en/).
- *
- * При заходе на сайт скрипт проверяет параметр lang, сохранённый выбор
- * и языки браузера, после чего переводит посетителя на нужную версию.
+ * The order below also controls the language selector. Russian intentionally
+ * comes first, as requested. English is the site's fallback language.
  */
 (function () {
   'use strict';
 
   var LANGS = [
-    { code: 'ru', name: 'Русский', dir: '' }
+    { code: 'ru', name: '🇷🇺 Русский', dir: 'ru/' },
+    { code: 'en', name: '🇬🇧 English', dir: '' }
   ];
+  var DEFAULT_LANGUAGE = 'en';
 
   window.SITE_LANGS = LANGS;
 
-  var current = (document.documentElement.getAttribute('lang') || 'ru').toLowerCase().split('-')[0];
+  var current = (document.documentElement.getAttribute('lang') || DEFAULT_LANGUAGE).toLowerCase().split('-')[0];
   var byCode = {};
   LANGS.forEach(function (lang) { byCode[lang.code] = lang; });
 
@@ -27,7 +24,7 @@
   }
 
   function storageSet(key, value) {
-    try { window.localStorage.setItem(key, value); } catch (error) { /* хранилище недоступно */ }
+    try { window.localStorage.setItem(key, value); } catch (error) { /* storage unavailable */ }
   }
 
   function siteRoot() {
@@ -45,17 +42,16 @@
     return '';
   }
 
-  /* Явный параметр lang имеет самый высокий приоритет. */
   try {
     var params = new URLSearchParams(window.location.search);
     var forced = (params.get('lang') || '').toLowerCase();
     if (forced && byCode[forced]) storageSet('site-lang', forced);
-  } catch (error) { /* браузер без URLSearchParams */ }
+  } catch (error) { /* legacy browser */ }
 
   var chosen = storageGet('site-lang');
-  var target = (chosen && byCode[chosen]) ? chosen : browserLanguage();
+  var target = (chosen && byCode[chosen]) ? chosen : (browserLanguage() || DEFAULT_LANGUAGE);
 
-  if (target && target !== current && byCode[target]) {
+  if (target !== current && byCode[target]) {
     var dir = byCode[target].dir;
     window.location.replace(dir ? new URL(dir, siteRoot()).href : siteRoot());
     return;
@@ -83,9 +79,6 @@
     });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initLangSelects);
-  } else {
-    initLangSelects();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initLangSelects);
+  else initLangSelects();
 })();

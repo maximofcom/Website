@@ -49,13 +49,23 @@
   var grid = document.getElementById('chapters');
   var stats = document.getElementById('book-stats');
 
-  function plural(count, forms) {
-    var rest10 = count % 10;
-    var rest100 = count % 100;
-    if (rest10 === 1 && rest100 !== 11) return forms[0];
-    if (rest10 >= 2 && rest10 <= 4 && (rest100 < 12 || rest100 > 14)) return forms[1];
-    return forms[2];
-  }
+  var UI = {
+    ru: {
+      stats: function (count) {
+        var rest10 = count % 10;
+        var rest100 = count % 100;
+        var word = (rest10 === 1 && rest100 !== 11) ? 'глава' :
+          (rest10 >= 2 && rest10 <= 4 && (rest100 < 12 || rest100 > 14)) ? 'главы' : 'глав';
+        return count + ' ' + word + ', нажмите на плитку, чтобы развернуть главу';
+      },
+      loadError: 'Не удалось загрузить текст книги: проверьте файл данных.'
+    },
+    en: {
+      stats: function (count) { return count + ' ' + (count === 1 ? 'chapter' : 'chapters') + ', click a tile to expand a chapter'; },
+      loadError: 'The book text could not be loaded. Check the data file.'
+    }
+  };
+  var strings = UI[(data && data.lang) || root.lang || 'en'] || UI.en;
 
   function buildParagraph(block) {
     var paragraph = document.createElement('p');
@@ -260,12 +270,12 @@
     window.addEventListener('load', function () { layoutTiles(false); });
 
     if (stats) {
-      stats.textContent = data.chapters.length + ' ' + plural(data.chapters.length, ['глава', 'главы', 'глав']) + ', нажмите на плитку, чтобы развернуть главу';
+      stats.textContent = strings.stats(data.chapters.length);
     }
   } else if (grid) {
     var message = document.createElement('p');
     message.className = 'note';
-    message.textContent = 'Не удалось загрузить текст книги: проверьте файл assets/js/data.ru.js.';
+    message.textContent = strings.loadError;
     grid.appendChild(message);
   }
 
