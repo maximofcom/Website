@@ -1,5 +1,4 @@
-/* Файл создан автоматически из Ru.docx скриптом tools/build-book.mjs.
-   Не редактируйте вручную — правьте книгу и запускайте: node tools/build-book.mjs */
+/* Book text (Russian). Keep the window.BOOK_DATA structure. */
 window.BOOK_DATA = {
   "lang": "ru",
   "title": "Как стать носителем иностранных языков за 4 месяца",
