@@ -1,10 +1,10 @@
 /*
- * langs.js - language registry, explicit language links and a soft suggestion banner.
+ * langs.js - language registry and explicit language links.
  *
  * Russian intentionally comes first in the selector. English is the fallback.
- * The site never redirects automatically because of browser language: it shows
- * a dismissible suggestion instead. A stored choice is honoured on the root
- * page only, and an explicit ?lang= link always wins.
+ * A stored choice is honoured on the root page only, and an explicit ?lang=
+ * link always wins. On the first visit, the root page follows the browser's
+ * language when it is Russian; other languages use English.
  */
 (function () {
   'use strict';
@@ -88,6 +88,16 @@
       window.location.replace(langUrl(stored));
       return;
     }
+
+    /* On the first visit, automatically choose Russian for Russian browsers. */
+    if (!stored && isRootPage() && current === DEFAULT_LANGUAGE) {
+      var preferred = browserLanguage();
+      if (preferred === 'ru') {
+        storageSet('site-lang', preferred);
+        window.location.replace(langUrl(preferred));
+        return;
+      }
+    }
   }
 
   function initLangSelects() {
@@ -111,57 +121,8 @@
     });
   }
 
-  function initBanner() {
-    if (explicit) return;
-    var banner = document.getElementById('lang-banner');
-    if (!banner) return;
-    if (storageGet('site-lang')) return;
-
-    var suggested = browserLanguage();
-    if (!suggested || suggested === current || !byCode[suggested]) return;
-    if (storageGet('lang-banner-dismissed') === suggested) return;
-
-    var isRussianPage = current === 'ru';
-    var text = isRussianPage
-      ? 'Сайт также доступен на английском языке.'
-      : 'This site is also available in Russian.';
-    var action = isRussianPage ? 'Read in English' : 'Read in Russian';
-    var dismissLabel = isRussianPage ? 'Скрыть предложение языка' : 'Dismiss language suggestion';
-
-    banner.textContent = '';
-
-    var message = document.createElement('p');
-    message.className = 'lang-banner-text';
-    message.textContent = text;
-
-    var link = document.createElement('a');
-    link.className = 'btn btn--small';
-    link.href = langUrl(suggested) + (langUrl(suggested).indexOf('?') === -1 ? '?' : '&') + 'lang=' + encodeURIComponent(suggested);
-    link.textContent = action;
-
-    var close = document.createElement('button');
-    close.type = 'button';
-    close.className = 'lang-banner-close';
-    close.setAttribute('aria-label', dismissLabel);
-    close.textContent = '\u00d7';
-    close.addEventListener('click', function () {
-      storageSet('lang-banner-dismissed', suggested);
-      banner.hidden = true;
-    });
-
-    var inner = document.createElement('div');
-    inner.className = 'container lang-banner-inner';
-    inner.appendChild(message);
-    inner.appendChild(link);
-    inner.appendChild(close);
-
-    banner.appendChild(inner);
-    banner.hidden = false;
-  }
-
   function init() {
     initLangSelects();
-    initBanner();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
