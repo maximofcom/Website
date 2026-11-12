@@ -1,0 +1,32 @@
+{
+  "name": "How to Become a Native Speaker of Foreign Languages in 4 Months",
+  "short_name": "Native Speaker",
+  "description": "Maximov Alexander's book: a fast method for learning foreign languages. Read all chapters on one page.",
+  "lang": "en",
+  "dir": "ltr",
+  "start_url": "/Website/",
+  "scope": "/Website/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#111111",
+  "icons": [
+    {
+      "src": "assets/img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/img/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

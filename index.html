@@ -4,12 +4,54 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>How to Become a Native Speaker of Foreign Languages in 4 Months &mdash; Maximov Alexander</title>
-  <meta name="description" content="Maximov Alexander&apos;s book: a fast method for learning foreign languages. All chapters on one page.">
+  <meta name="description" content="Maximov Alexander&apos;s book: a fast method for learning foreign languages. Read all 18 chapters on one page.">
   <meta name="author" content="Maximov Alexander">
   <meta name="theme-color" content="#ffffff">
+
+  <link rel="canonical" href="https://maximofcom.github.io/Website/">
+  <link rel="alternate" hreflang="en" href="https://maximofcom.github.io/Website/">
+  <link rel="alternate" hreflang="ru" href="https://maximofcom.github.io/Website/ru/">
+  <link rel="alternate" hreflang="x-default" href="https://maximofcom.github.io/Website/">
+
   <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-  <link rel="alternate" hreflang="en" href="./">
-  <link rel="alternate" hreflang="ru" href="ru/">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Maximov Alexander">
+  <meta property="og:title" content="How to Become a Native Speaker of Foreign Languages in 4 Months">
+  <meta property="og:description" content="A fast method for learning foreign languages: listening comprehension first, no grammar drills. Read the complete book online.">
+  <meta property="og:url" content="https://maximofcom.github.io/Website/">
+  <meta property="og:image" content="https://maximofcom.github.io/Website/assets/img/og-en.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Book cover: How to Become a Native Speaker of Foreign Languages in 4 Months by Maximov Alexander">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to Become a Native Speaker of Foreign Languages in 4 Months">
+  <meta name="twitter:description" content="A fast method for learning foreign languages: listening comprehension first, no grammar drills. Read the complete book online.">
+  <meta name="twitter:image" content="https://maximofcom.github.io/Website/assets/img/og-en.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Book",
+    "name": "How to Become a Native Speaker of Foreign Languages in 4 Months",
+    "author": {
+      "@type": "Person",
+      "name": "Maximov Alexander"
+    },
+    "inLanguage": "en",
+    "url": "https://maximofcom.github.io/Website/",
+    "description": "A fast method for learning foreign languages: listening comprehension first, no grammar drills. Read the complete book online.",
+    "image": "https://maximofcom.github.io/Website/assets/img/og-en.png",
+    "bookFormat": "https://schema.org/EBook",
+    "isAccessibleForFree": true
+  }
+  </script>
+
   <script>
     (function () {
       try {
@@ -19,7 +61,7 @@
         }
         document.documentElement.setAttribute('data-theme', theme);
       } catch (error) {
-        /* остаётся светлая тема по умолчанию */
+        /* light theme is the default */
       }
     })();
   </script>
@@ -50,6 +92,8 @@
     </div>
   </header>
 
+  <div class="lang-banner" id="lang-banner" hidden></div>
+
   <main id="top">
     <section class="hero">
       <div class="container">
@@ -67,8 +111,17 @@
 
     <section class="section" id="book">
       <div class="container">
-        <h2 class="section-title">Book</h2>
-        <p class="section-lead" id="book-stats">Click a tile to expand a chapter.</p>
+        <div class="section-head">
+          <div class="section-head-text">
+            <h2 class="section-title">Book</h2>
+            <p class="section-lead" id="book-stats">Click a tile to expand a chapter.</p>
+          </div>
+          <div class="book-toolbar" role="group" aria-label="Book view">
+            <button class="btn btn--small" type="button" data-book-action="expand">Expand all</button>
+            <button class="btn btn--small" type="button" data-book-action="collapse">Collapse all</button>
+            <button class="btn btn--small" type="button" data-book-action="print">Print / PDF</button>
+          </div>
+        </div>
         <div class="chapters" id="chapters"></div>
         <noscript>
           <p class="note">JavaScript is required to display the chapters. Enable it and refresh the page.</p>
@@ -82,54 +135,37 @@
         <p class="section-lead">Author&apos;s apps for learning listening comprehension and speaking in any foreign language.</p>
         <div class="cards">
           <article class="card">
-            <span class="tag">Coming soon</span>
+            <span class="tag">In development</span>
             <h3 class="card-title">Android app</h3>
             <p class="card-text">Train listening comprehension and speaking with the book&apos;s method on your phone.</p>
-            <div class="card-actions">
-              <span class="btn btn--disabled" aria-disabled="true" data-todo="app-android">Google Play</span>
-            </div>
           </article>
           <article class="card">
-            <span class="tag">Coming soon</span>
+            <span class="tag">In development</span>
             <h3 class="card-title">Chrome extension</h3>
             <p class="card-text">A browser assistant for learning languages with the book&apos;s method.</p>
-            <div class="card-actions">
-              <span class="btn btn--disabled" aria-disabled="true" data-todo="app-chrome">Chrome Web Store</span>
-            </div>
           </article>
         </div>
-        <p class="note">Working links will appear here when the apps are published. Replacement points are marked with data-todo.</p>
+        <p class="note">The apps are in development. There are no public builds yet.</p>
       </div>
     </section>
 
     <section class="section" id="support">
       <div class="container">
         <h2 class="section-title">Support the author</h2>
-        <p class="section-lead">The book, website and apps are free. If the method helps you, you can support the author.</p>
+        <p class="section-lead">The book and website are free. If the method helped you, tell others about it or write to the author.</p>
         <div class="cards">
           <article class="card">
-            <h3 class="card-title">Buy Me a Coffee</h3>
-            <p class="card-text">A one-time contribution.</p>
-            <div class="card-actions">
-              <span class="btn btn--disabled" aria-disabled="true" data-todo="donate-bmc">Link coming soon</span>
-            </div>
+            <h3 class="card-title">Tell your friends</h3>
+            <p class="card-text">Share the book with someone who wants to learn a foreign language.</p>
           </article>
           <article class="card">
-            <h3 class="card-title">Patreon</h3>
-            <p class="card-text">Regular support for the project.</p>
-            <div class="card-actions">
-              <span class="btn btn--disabled" aria-disabled="true" data-todo="donate-patreon">Link coming soon</span>
-            </div>
-          </article>
-          <article class="card">
-            <h3 class="card-title">Other ways</h3>
-            <p class="card-text">Tell your friends about the book or contact the author if you would like to help in another way.</p>
+            <h3 class="card-title">Contact the author</h3>
+            <p class="card-text">Questions, feedback or other ways to help.</p>
             <div class="card-actions">
               <a class="btn" href="mailto:maximof.com@gmail.com">Contact the author</a>
             </div>
           </article>
         </div>
-        <p class="note">Donation links will be added later. Replacement points are marked with data-todo.</p>
       </div>
     </section>
   </main>
@@ -150,24 +186,19 @@
           </ul>
         </div>
         <div>
-          <h2 class="footer-title">Social</h2>
+          <h2 class="footer-title">Project</h2>
           <ul class="footer-list">
-            <li><a href="#" data-todo="social-telegram">Telegram</a></li>
-            <li><a href="#" data-todo="social-whatsapp">WhatsApp</a></li>
-            <li><a href="#" data-todo="social-facebook">Facebook</a></li>
-            <li><a href="#" data-todo="social-instagram">Instagram</a></li>
-            <li><a href="#" data-todo="social-vk">VK</a></li>
-            <li><a href="#" data-todo="social-linkedin">LinkedIn</a></li>
-            <li><a href="#" data-todo="social-github">GitHub</a></li>
+            <li><a href="https://github.com/maximofcom/Website">Source code</a></li>
+            <li><a href="https://github.com/maximofcom/Website/issues">Report an issue</a></li>
           </ul>
         </div>
         <div>
           <h2 class="footer-title">Site language</h2>
           <label class="visually-hidden" for="lang-select-footer">Site language</label>
           <select class="lang-select js-lang-select" id="lang-select-footer">
-          <option value="ru">&#127479;&#127482; Русский</option>
-          <option value="en" selected>&#127468;&#127463; English</option>
-        </select>
+            <option value="ru">&#127479;&#127482; Русский</option>
+            <option value="en" selected>&#127468;&#127463; English</option>
+          </select>
         </div>
       </div>
       <div class="footer-bottom">

@@ -4,12 +4,54 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Как стать носителем иностранных языков за 4 месяца &mdash; Maximov Alexander</title>
-  <meta name="description" content="Книга Maximov Alexander: самый быстрый метод изучения иностранных языков. Все главы на одной странице.">
+  <meta name="description" content="Книга Maximov Alexander: быстрый метод изучения иностранных языков. Все 18 глав на одной странице.">
   <meta name="author" content="Maximov Alexander">
   <meta name="theme-color" content="#ffffff">
+
+  <link rel="canonical" href="https://maximofcom.github.io/Website/ru/">
+  <link rel="alternate" hreflang="en" href="https://maximofcom.github.io/Website/">
+  <link rel="alternate" hreflang="ru" href="https://maximofcom.github.io/Website/ru/">
+  <link rel="alternate" hreflang="x-default" href="https://maximofcom.github.io/Website/">
+
   <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
-  <link rel="alternate" hreflang="en" href="../">
-  <link rel="alternate" hreflang="ru" href="./">
+  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Maximov Alexander">
+  <meta property="og:title" content="Как стать носителем иностранных языков за 4 месяца">
+  <meta property="og:description" content="Быстрый метод изучения иностранных языков: сначала понимание на слух, без зубрёжки грамматики. Полная книга онлайн.">
+  <meta property="og:url" content="https://maximofcom.github.io/Website/ru/">
+  <meta property="og:image" content="https://maximofcom.github.io/Website/assets/img/og-ru.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Обложка книги: Как стать носителем иностранных языков за 4 месяца, Maximov Alexander">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Как стать носителем иностранных языков за 4 месяца">
+  <meta name="twitter:description" content="Быстрый метод изучения иностранных языков: сначала понимание на слух, без зубрёжки грамматики. Полная книга онлайн.">
+  <meta name="twitter:image" content="https://maximofcom.github.io/Website/assets/img/og-ru.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Book",
+    "name": "Как стать носителем иностранных языков за 4 месяца",
+    "author": {
+      "@type": "Person",
+      "name": "Maximov Alexander"
+    },
+    "inLanguage": "ru",
+    "url": "https://maximofcom.github.io/Website/ru/",
+    "description": "Быстрый метод изучения иностранных языков: сначала понимание на слух, без зубрёжки грамматики. Полная книга онлайн.",
+    "image": "https://maximofcom.github.io/Website/assets/img/og-ru.png",
+    "bookFormat": "https://schema.org/EBook",
+    "isAccessibleForFree": true
+  }
+  </script>
+
   <script>
     (function () {
       try {
@@ -50,25 +92,36 @@
     </div>
   </header>
 
+  <div class="lang-banner" id="lang-banner" hidden></div>
+
   <main id="top">
     <section class="hero">
       <div class="container">
         <p class="hero-author">Maximov Alexander</p>
         <h1 class="hero-title">Как стать носителем иностранных языков за 4 месяца</h1>
-        <p class="hero-lead">Самый быстрый метод изучения иностранных языков.</p>
+        <p class="hero-lead">Быстрый метод изучения иностранных языков.</p>
         <p class="hero-text">Главная идея метода &mdash; быстро достичь понимания на слух телевизионных каналов, понимая общий смысл, без разбора деталей. Вся книга ниже: нажмите на главу, чтобы раскрыть её.</p>
         <div class="hero-actions">
           <a class="btn btn--primary" href="#book">Читать книгу</a>
           <a class="btn" href="#apps">Приложения автора</a>
-          <a class="btn" href="#support">Поддержать</a>
+          <a class="btn" href="#support">Поддержать автора</a>
         </div>
       </div>
     </section>
 
     <section class="section" id="book">
       <div class="container">
-        <h2 class="section-title">Книга</h2>
-        <p class="section-lead" id="book-stats">Нажмите на плитку, чтобы развернуть главу.</p>
+        <div class="section-head">
+          <div class="section-head-text">
+            <h2 class="section-title">Книга</h2>
+            <p class="section-lead" id="book-stats">Нажмите на плитку, чтобы развернуть главу.</p>
+          </div>
+          <div class="book-toolbar" role="group" aria-label="Вид книги">
+            <button class="btn btn--small" type="button" data-book-action="expand">Развернуть все</button>
+            <button class="btn btn--small" type="button" data-book-action="collapse">Свернуть все</button>
+            <button class="btn btn--small" type="button" data-book-action="print">Печать / PDF</button>
+          </div>
+        </div>
         <div class="chapters" id="chapters"></div>
         <noscript>
           <p class="note">Для отображения глав нужен JavaScript: включите его и обновите страницу.</p>
@@ -79,57 +132,40 @@
     <section class="section" id="apps">
       <div class="container">
         <h2 class="section-title">Приложения</h2>
-        <p class="section-lead">Авторские приложения для обучения пониманию на слух и говорению на всех иностранных языках.</p>
+        <p class="section-lead">Авторские приложения для обучения пониманию на слух и говорению на любом иностранном языке.</p>
         <div class="cards">
           <article class="card">
-            <span class="tag">Скоро</span>
+            <span class="tag">В разработке</span>
             <h3 class="card-title">Приложение для Android</h3>
-            <p class="card-text">Тренировка понимания на слух и говорения по методу книги, в телефоне.</p>
-            <div class="card-actions">
-              <span class="btn btn--disabled" aria-disabled="true" data-todo="app-android">Google Play</span>
-            </div>
+            <p class="card-text">Тренировка понимания на слух и говорения по методу книги в телефоне.</p>
           </article>
           <article class="card">
-            <span class="tag">Скоро</span>
+            <span class="tag">В разработке</span>
             <h3 class="card-title">Расширение для Chrome</h3>
             <p class="card-text">Помощник для изучения языка по методу книги прямо в браузере.</p>
-            <div class="card-actions">
-              <span class="btn btn--disabled" aria-disabled="true" data-todo="app-chrome">Chrome Web Store</span>
-            </div>
           </article>
         </div>
-        <p class="note">Когда приложения будут опубликованы, здесь появятся рабочие ссылки. Места для замены помечены атрибутом data-todo.</p>
+        <p class="note">Приложения в разработке. Публичных сборок пока нет.</p>
       </div>
     </section>
 
     <section class="section" id="support">
       <div class="container">
         <h2 class="section-title">Поддержать автора</h2>
-        <p class="section-lead">Книга, сайт и приложения бесплатны. Если метод оказался полезным, вы можете поддержать автора.</p>
+        <p class="section-lead">Книга и сайт бесплатны. Если метод помог вам, расскажите о нём другим или напишите автору.</p>
         <div class="cards">
           <article class="card">
-            <h3 class="card-title">Buy Me a Coffee</h3>
-            <p class="card-text">Разовая поддержка проекта.</p>
-            <div class="card-actions">
-              <span class="btn btn--disabled" aria-disabled="true" data-todo="donate-bmc">Ссылка скоро</span>
-            </div>
+            <h3 class="card-title">Расскажите друзьям</h3>
+            <p class="card-text">Поделитесь книгой с тем, кто хочет выучить иностранный язык.</p>
           </article>
           <article class="card">
-            <h3 class="card-title">Patreon</h3>
-            <p class="card-text">Регулярная поддержка проекта.</p>
-            <div class="card-actions">
-              <span class="btn btn--disabled" aria-disabled="true" data-todo="donate-patreon">Ссылка скоро</span>
-            </div>
-          </article>
-          <article class="card">
-            <h3 class="card-title">Другие способы</h3>
-            <p class="card-text">Расскажите о книге друзьям или напишите автору, если хотите помочь иначе.</p>
+            <h3 class="card-title">Связаться с автором</h3>
+            <p class="card-text">Вопросы, отзывы и другие способы помочь.</p>
             <div class="card-actions">
               <a class="btn" href="mailto:maximof.com@gmail.com">Написать автору</a>
             </div>
           </article>
         </div>
-        <p class="note">Ссылки на сервисы донатов появятся позже. Места для замены помечены атрибутом data-todo.</p>
       </div>
     </section>
   </main>
@@ -150,24 +186,19 @@
           </ul>
         </div>
         <div>
-          <h2 class="footer-title">Соцсети</h2>
+          <h2 class="footer-title">Проект</h2>
           <ul class="footer-list">
-            <li><a href="#" data-todo="social-telegram">Telegram</a></li>
-            <li><a href="#" data-todo="social-whatsapp">WhatsApp</a></li>
-            <li><a href="#" data-todo="social-facebook">Facebook</a></li>
-            <li><a href="#" data-todo="social-instagram">Instagram</a></li>
-            <li><a href="#" data-todo="social-vk">VK</a></li>
-            <li><a href="#" data-todo="social-linkedin">LinkedIn</a></li>
-            <li><a href="#" data-todo="social-github">GitHub</a></li>
+            <li><a href="https://github.com/maximofcom/Website">Исходный код</a></li>
+            <li><a href="https://github.com/maximofcom/Website/issues">Сообщить о проблеме</a></li>
           </ul>
         </div>
         <div>
           <h2 class="footer-title">Язык сайта</h2>
           <label class="visually-hidden" for="lang-select-footer">Язык сайта</label>
           <select class="lang-select js-lang-select" id="lang-select-footer">
-          <option value="ru" selected>&#127479;&#127482; Русский</option>
-          <option value="en">&#127468;&#127463; English</option>
-        </select>
+            <option value="ru" selected>&#127479;&#127482; Русский</option>
+            <option value="en">&#127468;&#127463; English</option>
+          </select>
         </div>
       </div>
       <div class="footer-bottom">

@@ -1,12 +1,39 @@
 /*
- * app.js - логика сайта: светлая и тёмная темы, главы книги, год в подвале.
+ * app.js - site logic: light and dark themes, book chapters, layout, deep links.
+ * No dependencies.
  */
 (function () {
   'use strict';
 
   var root = document.documentElement;
+  var data = window.BOOK_DATA;
+  var lang = (data && data.lang) || (root.getAttribute('lang') || 'en').toLowerCase().split('-')[0];
 
-  /* ---------------- Тема оформления ---------------- */
+  var UI = {
+    ru: {
+      stats: function (count) {
+        var rest10 = count % 10;
+        var rest100 = count % 100;
+        var word = (rest10 === 1 && rest100 !== 11) ? 'глава' :
+          (rest10 >= 2 && rest10 <= 4 && (rest100 < 12 || rest100 > 14)) ? 'главы' : 'глав';
+        return count + ' ' + word + '. Нажмите на плитку, чтобы раскрыть главу.';
+      },
+      loadError: 'Не удалось загрузить текст книги: проверьте файл данных.',
+      themeToDark: 'Включить тёмную тему',
+      themeToLight: 'Включить светлую тему'
+    },
+    en: {
+      stats: function (count) {
+        return count + ' ' + (count === 1 ? 'chapter' : 'chapters') + '. Click a tile to expand a chapter.';
+      },
+      loadError: 'The book text could not be loaded. Check the data file.',
+      themeToDark: 'Switch to dark theme',
+      themeToLight: 'Switch to light theme'
+    }
+  };
+  var strings = UI[lang] || UI.en;
+
+  /* ---------------- Theme ---------------- */
 
   var THEME_KEY = 'theme';
   var themeButton = document.getElementById('theme-toggle');
@@ -18,13 +45,18 @@
   }
 
   function saveTheme(value) {
-    try { window.localStorage.setItem(THEME_KEY, value); } catch (error) { /* хранилище недоступно */ }
+    try { window.localStorage.setItem(THEME_KEY, value); } catch (error) { /* storage unavailable */ }
   }
 
   function applyTheme(theme) {
     root.setAttribute('data-theme', theme);
-    if (themeButton) themeButton.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
     if (themeMeta) themeMeta.setAttribute('content', theme === 'dark' ? '#0d0d0d' : '#ffffff');
+    if (themeButton) {
+      var label = theme === 'dark' ? strings.themeToLight : strings.themeToDark;
+      themeButton.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+      themeButton.setAttribute('aria-label', label);
+      themeButton.setAttribute('title', label);
+    }
   }
 
   applyTheme(root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
@@ -43,29 +75,28 @@
     });
   }
 
-  /* ---------------- Главы книги ---------------- */
+  /* ---------------- Header offset for anchors ---------------- */
 
-  var data = window.BOOK_DATA;
+  var header = document.querySelector('.site-header');
+
+  function updateHeaderOffset() {
+    var height = header ? header.getBoundingClientRect().height : 0;
+    root.style.setProperty('--header-offset', Math.round(height) + 'px');
+  }
+
+  updateHeaderOffset();
+  if (header) {
+    if (window.ResizeObserver) {
+      new window.ResizeObserver(updateHeaderOffset).observe(header);
+    } else {
+      window.addEventListener('resize', updateHeaderOffset);
+    }
+  }
+
+  /* ---------------- Book chapters ---------------- */
+
   var grid = document.getElementById('chapters');
   var stats = document.getElementById('book-stats');
-
-  var UI = {
-    ru: {
-      stats: function (count) {
-        var rest10 = count % 10;
-        var rest100 = count % 100;
-        var word = (rest10 === 1 && rest100 !== 11) ? 'глава' :
-          (rest10 >= 2 && rest10 <= 4 && (rest100 < 12 || rest100 > 14)) ? 'главы' : 'глав';
-        return count + ' ' + word + ', нажмите на плитку, чтобы развернуть главу';
-      },
-      loadError: 'Не удалось загрузить текст книги: проверьте файл данных.'
-    },
-    en: {
-      stats: function (count) { return count + ' ' + (count === 1 ? 'chapter' : 'chapters') + ', click a tile to expand a chapter'; },
-      loadError: 'The book text could not be loaded. Check the data file.'
-    }
-  };
-  var strings = UI[(data && data.lang) || root.lang || 'en'] || UI.en;
 
   function buildParagraph(block) {
     var paragraph = document.createElement('p');
@@ -83,6 +114,18 @@
     });
     if (position < text.length) paragraph.appendChild(document.createTextNode(text.slice(position)));
     return paragraph;
+  }
+
+  function buildList(block) {
+    var ordered = block.ordered === true;
+    var list = document.createElement(ordered ? 'ol' : 'ul');
+    list.className = 'tile-list';
+    (block.items || []).forEach(function (item) {
+      var li = document.createElement('li');
+      li.textContent = item;
+      list.appendChild(li);
+    });
+    return list;
   }
 
   function buildTable(block) {
@@ -120,6 +163,8 @@
     image.alt = block.alt || '';
     image.loading = 'lazy';
     image.decoding = 'async';
+    if (block.width) image.setAttribute('width', String(block.width));
+    if (block.height) image.setAttribute('height', String(block.height));
     figure.appendChild(image);
     return figure;
   }
@@ -129,12 +174,16 @@
     article.className = 'tile';
     article.id = chapter.id;
 
+    var heading = document.createElement('h3');
+    heading.className = 'tile-heading';
+
     var toggle = document.createElement('button');
     toggle.type = 'button';
     toggle.className = 'tile-toggle';
     toggle.id = chapter.id + '-toggle';
     toggle.setAttribute('aria-expanded', 'false');
     toggle.setAttribute('aria-controls', chapter.id + '-body');
+    toggle.setAttribute('aria-label', chapter.title);
 
     var head = document.createElement('span');
     head.className = 'tile-head';
@@ -170,11 +219,12 @@
       toggle.appendChild(preview);
     }
 
+    heading.appendChild(toggle);
+    article.appendChild(heading);
+
     var body = document.createElement('div');
     body.className = 'tile-body';
     body.id = chapter.id + '-body';
-    body.setAttribute('role', 'region');
-    body.setAttribute('aria-labelledby', toggle.id);
 
     var inner = document.createElement('div');
     inner.className = 'tile-body-inner';
@@ -183,13 +233,13 @@
     content.className = 'tile-content';
     (chapter.blocks || []).forEach(function (block) {
       if (block.type === 'p') content.appendChild(buildParagraph(block));
+      else if (block.type === 'list') content.appendChild(buildList(block));
       else if (block.type === 'table') content.appendChild(buildTable(block));
       else if (block.type === 'img') content.appendChild(buildFigure(block));
     });
 
     inner.appendChild(content);
     body.appendChild(inner);
-    article.appendChild(toggle);
     article.appendChild(body);
     return article;
   }
@@ -197,22 +247,34 @@
   function setChapterOpen(article, toggle, body, open) {
     article.classList.toggle('is-open', open);
     toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-    if ('inert' in body) body.inert = !open;
+    if ('inert' in body) {
+      body.inert = !open;
+      body.removeAttribute('aria-hidden');
+    } else if (open) {
+      body.removeAttribute('aria-hidden');
+    } else {
+      body.setAttribute('aria-hidden', 'true');
+    }
   }
-  /* ---------------- Раскладка плиток ---------------- */
-  /* Плитки стоят плотной кладкой: каждая попадает в самую короткую колонку,
-     высота задаётся содержимым плитки, поэтому пустых промежутков не остаётся. */
 
-  var LAYOUT_GAP = 16; /* вертикальный зазор между плитками, px */
-  var LAYOUT_ROW = 2;  /* шаг служебных строк сетки, px (совпадает с CSS) */
+  /* ---------------- Dense tile layout ---------------- */
 
-  function layoutTiles(reuseColumns) {
-    var tiles = Array.prototype.slice.call(grid.querySelectorAll('.tile'));
-    if (!tiles.length) return;
+  var LAYOUT_GAP = 16; /* vertical gap between tiles, px */
+  var LAYOUT_ROW = 2;  /* grid row step, px (must match CSS) */
+  var tiles = [];
+  var columns = 1;
+  var layoutFrame = 0;
+  var layoutReuse = true;
 
+  function measureColumns() {
+    if (!grid) return 1;
     var template = window.getComputedStyle(grid).gridTemplateColumns;
-    var columns = template ? template.split(' ').filter(Boolean).length : 1;
-    if (!columns) columns = 1;
+    if (!template || template === 'none') return 1;
+    return template.trim().split(/\s+/).length || 1;
+  }
+
+  function layoutTiles(reuse) {
+    if (!grid || !tiles.length) return;
 
     var heights = [];
     var sizes = [];
@@ -223,7 +285,7 @@
     for (i = 0; i < tiles.length; i++) {
       var span = Math.max(1, Math.ceil((sizes[i] + LAYOUT_GAP) / LAYOUT_ROW));
       var column = 0;
-      if (reuseColumns && tiles[i].dataset.col) {
+      if (reuse && tiles[i].dataset.col) {
         column = Math.min(columns - 1, Number(tiles[i].dataset.col) || 0);
       } else {
         for (var c = 1; c < columns; c++) {
@@ -238,13 +300,64 @@
     }
   }
 
-  function animateLayout(duration) {
-    var start = window.performance.now();
-    function step(now) {
-      layoutTiles(true);
-      if (now - start < duration) window.requestAnimationFrame(step);
+  function scheduleLayout(reuse) {
+    layoutReuse = reuse;
+    if (layoutFrame) return;
+    layoutFrame = window.requestAnimationFrame(function () {
+      layoutFrame = 0;
+      layoutTiles(layoutReuse);
+    });
+  }
+
+  /* ---------------- Deep links and toolbar ---------------- */
+
+  function findTile(id) {
+    if (!id || !grid) return null;
+    var tile = document.getElementById(id);
+    return tile && tile.classList.contains('tile') ? tile : null;
+  }
+
+  function setHash(id) {
+    try {
+      if (id) window.history.replaceState(null, '', '#' + id);
+      else window.history.replaceState(null, '', window.location.pathname + window.location.search);
+    } catch (error) { /* history unavailable */ }
+  }
+
+  function openFromHash(smooth) {
+    var tile = findTile(window.location.hash.replace(/^#/, ''));
+    if (!tile) return false;
+    var toggle = tile.querySelector('.tile-toggle');
+    var body = tile.querySelector('.tile-body');
+    if (toggle && body && !tile.classList.contains('is-open')) {
+      setChapterOpen(tile, toggle, body, true);
     }
-    window.requestAnimationFrame(step);
+    scheduleLayout(true);
+    window.requestAnimationFrame(function () {
+      window.requestAnimationFrame(function () {
+        tile.scrollIntoView({ block: 'start', behavior: smooth ? 'smooth' : 'auto' });
+      });
+    });
+    return true;
+  }
+
+  function eachTile(callback) {
+    tiles.forEach(callback);
+  }
+
+  function expandAll() {
+    eachTile(function (tile) {
+      setChapterOpen(tile, tile.querySelector('.tile-toggle'), tile.querySelector('.tile-body'), true);
+    });
+    scheduleLayout(true);
+  }
+
+  function collapseAll() {
+    eachTile(function (tile) {
+      setChapterOpen(tile, tile.querySelector('.tile-toggle'), tile.querySelector('.tile-body'), false);
+    });
+    if (findTile(window.location.hash.replace(/^#/, ''))) setHash('');
+    scheduleLayout(true);
   }
 
   if (grid && data && data.chapters && data.chapters.length) {
@@ -253,32 +366,71 @@
       fragment.appendChild(buildChapter(chapter, index));
     });
     grid.appendChild(fragment);
+    tiles = Array.prototype.slice.call(grid.querySelectorAll('.tile'));
 
-    Array.prototype.forEach.call(grid.querySelectorAll('.tile'), function (tile) {
+    tiles.forEach(function (tile) {
       var toggle = tile.querySelector('.tile-toggle');
       var body = tile.querySelector('.tile-body');
-      if (body && 'inert' in body) body.inert = true;
+      setChapterOpen(tile, toggle, body, false);
+
+      var openNow = function (open) {
+        setChapterOpen(tile, toggle, body, open);
+        scheduleLayout(true);
+        /* When transitions are disabled, transitionend never fires, so remeasure once the frame settles. */
+        window.requestAnimationFrame(function () {
+          window.requestAnimationFrame(function () { scheduleLayout(true); });
+        });
+      };
+
       toggle.addEventListener('click', function () {
         var open = !tile.classList.contains('is-open');
-        setChapterOpen(tile, toggle, body, open);
-        animateLayout(420);
+        openNow(open);
+        if (open) setHash(tile.id);
+        else if (window.location.hash === '#' + tile.id) setHash('');
+      });
+
+      body.addEventListener('transitionend', function (event) {
+        if (event.propertyName === 'grid-template-rows') scheduleLayout(true);
       });
     });
 
+    columns = measureColumns();
     layoutTiles(false);
-    var resizeTimer = 0;
-    window.addEventListener('resize', function () {
-      window.clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(function () { layoutTiles(false); }, 120);
-    });
-    Array.prototype.forEach.call(grid.querySelectorAll('img'), function (image) {
-      image.addEventListener('load', function () { layoutTiles(true); });
-    });
-    window.addEventListener('load', function () { layoutTiles(false); });
 
-    if (stats) {
-      stats.textContent = strings.stats(data.chapters.length);
+    if (window.ResizeObserver) {
+      var tileObserver = new window.ResizeObserver(function () { scheduleLayout(true); });
+      tiles.forEach(function (tile) { tileObserver.observe(tile); });
+
+      var gridObserver = new window.ResizeObserver(function () {
+        var next = measureColumns();
+        if (next !== columns) {
+          columns = next;
+          layoutTiles(false);
+        }
+      });
+      gridObserver.observe(grid);
+    } else {
+      window.addEventListener('resize', function () {
+        columns = measureColumns();
+        layoutTiles(false);
+      });
     }
+
+    window.addEventListener('hashchange', function () { openFromHash(true); });
+    window.addEventListener('load', function () { scheduleLayout(false); });
+    if (document.fonts && document.fonts.ready && document.fonts.ready.then) {
+      document.fonts.ready.then(function () { scheduleLayout(false); });
+    }
+
+    var expandButton = document.querySelector('[data-book-action="expand"]');
+    var collapseButton = document.querySelector('[data-book-action="collapse"]');
+    var printButton = document.querySelector('[data-book-action="print"]');
+    if (expandButton) expandButton.addEventListener('click', expandAll);
+    if (collapseButton) collapseButton.addEventListener('click', collapseAll);
+    if (printButton) printButton.addEventListener('click', function () { window.print(); });
+
+    if (stats) stats.textContent = strings.stats(data.chapters.length);
+    openFromHash(false);
   } else if (grid) {
     var message = document.createElement('p');
     message.className = 'note';
@@ -286,7 +438,7 @@
     grid.appendChild(message);
   }
 
-  /* ---------------- Год в подвале ---------------- */
+  /* ---------------- Footer year ---------------- */
 
   var year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page not found &mdash; Maximov Alexander</title>
+  <meta name="description" content="The requested page was not found.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" type="image/svg+xml" href="/Website/assets/img/favicon.svg">
+  <link rel="apple-touch-icon" href="/Website/assets/img/apple-touch-icon.png">
+  <script>
+    (function () {
+      try {
+        var theme = window.localStorage.getItem('theme');
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (error) {
+        /* light theme is the default */
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="/Website/assets/css/style.css">
+</head>
+<body>
+  <main id="top">
+    <section class="hero">
+      <div class="container">
+        <p class="hero-author">404</p>
+        <h1 class="hero-title">Page not found</h1>
+        <p class="hero-lead">This page does not exist or has moved.</p>
+        <p class="hero-text">The book is available on the main page, in English and Russian.</p>
+        <div class="hero-actions">
+          <a class="btn btn--primary" href="/Website/">Read in English</a>
+          <a class="btn" href="/Website/ru/">Читать по-русски</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

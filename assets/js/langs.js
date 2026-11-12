@@ -1,8 +1,10 @@
 /*
- * langs.js - language registry and visitor language detection.
+ * langs.js - language registry, explicit language links and a soft suggestion banner.
  *
- * The order below also controls the language selector. Russian intentionally
- * comes first, as requested. English is the site's fallback language.
+ * Russian intentionally comes first in the selector. English is the fallback.
+ * The site never redirects automatically because of browser language: it shows
+ * a dismissible suggestion instead. A stored choice is honoured on the root
+ * page only, and an explicit ?lang= link always wins.
  */
 (function () {
   'use strict';
@@ -33,8 +35,7 @@
     return new URL('./', window.location.href).href;
   }
 
-  /* Абсолютный путь к корню сайта: нужен для ресурсов из файлов данных
-     (например, картинок), потому что глубина страниц ru/ и корня различается. */
+  /* Absolute URL of the site root. Data files use it for shared assets. */
   window.SITE_ROOT = siteRoot();
 
   function browserLanguage() {
@@ -46,19 +47,47 @@
     return '';
   }
 
+  function langUrl(code) {
+    var dir = byCode[code].dir;
+    return dir ? new URL(dir, siteRoot()).href : siteRoot();
+  }
+
+  function isRootPage() {
+    try {
+      var rootPath = new URL(siteRoot()).pathname;
+      var path = window.location.pathname;
+      return path === rootPath || path === rootPath + 'index.html';
+    } catch (error) {
+      return false;
+    }
+  }
+
+  /* Explicit ?lang= links are user intent: store and follow them. */
+  var explicit = false;
   try {
     var params = new URLSearchParams(window.location.search);
     var forced = (params.get('lang') || '').toLowerCase();
-    if (forced && byCode[forced]) storageSet('site-lang', forced);
+    if (forced && byCode[forced]) {
+      explicit = true;
+      storageSet('site-lang', forced);
+      if (forced !== current) {
+        window.location.replace(langUrl(forced));
+        return;
+      }
+      params.delete('lang');
+      var query = params.toString();
+      var clean = window.location.pathname + (query ? '?' + query : '') + window.location.hash;
+      try { window.history.replaceState(null, '', clean); } catch (error) { /* history unavailable */ }
+    }
   } catch (error) { /* legacy browser */ }
 
-  var chosen = storageGet('site-lang');
-  var target = (chosen && byCode[chosen]) ? chosen : (browserLanguage() || DEFAULT_LANGUAGE);
-
-  if (target !== current && byCode[target]) {
-    var dir = byCode[target].dir;
-    window.location.replace(dir ? new URL(dir, siteRoot()).href : siteRoot());
-    return;
+  /* Honour a stored choice only on the root page, never on a direct subpage link. */
+  if (!explicit) {
+    var stored = storageGet('site-lang');
+    if (stored && byCode[stored] && stored !== current && isRootPage()) {
+      window.location.replace(langUrl(stored));
+      return;
+    }
   }
 
   function initLangSelects() {
@@ -77,12 +106,64 @@
         if (!byCode[code]) return;
         storageSet('site-lang', code);
         if (code === current) return;
-        var dir = byCode[code].dir;
-        window.location.href = dir ? new URL(dir, siteRoot()).href : siteRoot();
+        window.location.href = langUrl(code);
       });
     });
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initLangSelects);
-  else initLangSelects();
+  function initBanner() {
+    if (explicit) return;
+    var banner = document.getElementById('lang-banner');
+    if (!banner) return;
+    if (storageGet('site-lang')) return;
+
+    var suggested = browserLanguage();
+    if (!suggested || suggested === current || !byCode[suggested]) return;
+    if (storageGet('lang-banner-dismissed') === suggested) return;
+
+    var isRussianPage = current === 'ru';
+    var text = isRussianPage
+      ? 'Сайт также доступен на английском языке.'
+      : 'This site is also available in Russian.';
+    var action = isRussianPage ? 'Read in English' : 'Read in Russian';
+    var dismissLabel = isRussianPage ? 'Скрыть предложение языка' : 'Dismiss language suggestion';
+
+    banner.textContent = '';
+
+    var message = document.createElement('p');
+    message.className = 'lang-banner-text';
+    message.textContent = text;
+
+    var link = document.createElement('a');
+    link.className = 'btn btn--small';
+    link.href = langUrl(suggested) + (langUrl(suggested).indexOf('?') === -1 ? '?' : '&') + 'lang=' + encodeURIComponent(suggested);
+    link.textContent = action;
+
+    var close = document.createElement('button');
+    close.type = 'button';
+    close.className = 'lang-banner-close';
+    close.setAttribute('aria-label', dismissLabel);
+    close.textContent = '\u00d7';
+    close.addEventListener('click', function () {
+      storageSet('lang-banner-dismissed', suggested);
+      banner.hidden = true;
+    });
+
+    var inner = document.createElement('div');
+    inner.className = 'container lang-banner-inner';
+    inner.appendChild(message);
+    inner.appendChild(link);
+    inner.appendChild(close);
+
+    banner.appendChild(inner);
+    banner.hidden = false;
+  }
+
+  function init() {
+    initLangSelects();
+    initBanner();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
 })();
