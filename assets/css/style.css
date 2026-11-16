@@ -350,22 +350,8 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   margin-bottom: 28px;
 }
 
-.section-head-text {
-  flex: 1 1 320px;
-}
-
 .section-head .section-title {
   margin-bottom: 8px;
-}
-
-.section-head .section-lead {
-  margin-bottom: 0;
-}
-
-.book-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
 }
 
 .section-title {
@@ -433,22 +419,9 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
 .tile-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 12px;
   margin-bottom: 10px;
-}
-
-.tile-number {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
-}
-
-.tile-toggle:hover .tile-number {
-  color: inherit;
-  opacity: 0.75;
 }
 
 .tile-marker {
@@ -526,9 +499,10 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
 }
 
 .tile-content mark {
-  background: var(--mark-bg);
+  background: transparent;
   color: inherit;
-  padding: 0 0.08em;
+  font-style: italic;
+  padding: 0;
 }
 
 .tile-content .tile-list {
@@ -755,7 +729,6 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   .site-header,
   .skip-link,
   .lang-banner,
-  .book-toolbar,
   .hero-actions,
   #apps,
   #support,
@@ -817,10 +790,6 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
     margin-bottom: 4px;
   }
 
-  .tile-number {
-    color: #000000;
-  }
-
   .tile-title {
     font-size: 14pt;
   }
@@ -852,7 +821,7 @@ html[data-theme="dark"] .theme-toggle .icon-moon {
   }
 
   .tile-content mark {
-    background: #eeeeee;
+    background: transparent;
   }
 
   .tile-content figure img {

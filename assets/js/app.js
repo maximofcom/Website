@@ -11,21 +11,11 @@
 
   var UI = {
     ru: {
-      stats: function (count) {
-        var rest10 = count % 10;
-        var rest100 = count % 100;
-        var word = (rest10 === 1 && rest100 !== 11) ? 'глава' :
-          (rest10 >= 2 && rest10 <= 4 && (rest100 < 12 || rest100 > 14)) ? 'главы' : 'глав';
-        return count + ' ' + word + '. Нажмите на плитку, чтобы раскрыть главу.';
-      },
       loadError: 'Не удалось загрузить текст книги: проверьте файл данных.',
       themeToDark: 'Включить тёмную тему',
       themeToLight: 'Включить светлую тему'
     },
     en: {
-      stats: function (count) {
-        return count + ' ' + (count === 1 ? 'chapter' : 'chapters') + '. Click a tile to expand a chapter.';
-      },
       loadError: 'The book text could not be loaded. Check the data file.',
       themeToDark: 'Switch to dark theme',
       themeToLight: 'Switch to light theme'
@@ -96,7 +86,6 @@
   /* ---------------- Book chapters ---------------- */
 
   var grid = document.getElementById('chapters');
-  var stats = document.getElementById('book-stats');
 
   function buildParagraph(block) {
     var paragraph = document.createElement('p');
@@ -169,7 +158,7 @@
     return figure;
   }
 
-  function buildChapter(chapter, index) {
+  function buildChapter(chapter) {
     var article = document.createElement('article');
     article.className = 'tile';
     article.id = chapter.id;
@@ -187,12 +176,6 @@
 
     var head = document.createElement('span');
     head.className = 'tile-head';
-
-    var number = document.createElement('span');
-    number.className = 'tile-number';
-    number.setAttribute('aria-hidden', 'true');
-    number.textContent = (index + 1 < 10 ? '0' : '') + (index + 1);
-    head.appendChild(number);
 
     var marker = document.createElement('span');
     marker.className = 'tile-marker';
@@ -309,7 +292,7 @@
     });
   }
 
-  /* ---------------- Deep links and toolbar ---------------- */
+  /* ---------------- Deep links ---------------- */
 
   function findTile(id) {
     if (!id || !grid) return null;
@@ -341,29 +324,10 @@
     return true;
   }
 
-  function eachTile(callback) {
-    tiles.forEach(callback);
-  }
-
-  function expandAll() {
-    eachTile(function (tile) {
-      setChapterOpen(tile, tile.querySelector('.tile-toggle'), tile.querySelector('.tile-body'), true);
-    });
-    scheduleLayout(true);
-  }
-
-  function collapseAll() {
-    eachTile(function (tile) {
-      setChapterOpen(tile, tile.querySelector('.tile-toggle'), tile.querySelector('.tile-body'), false);
-    });
-    if (findTile(window.location.hash.replace(/^#/, ''))) setHash('');
-    scheduleLayout(true);
-  }
-
   if (grid && data && data.chapters && data.chapters.length) {
     var fragment = document.createDocumentFragment();
-    data.chapters.forEach(function (chapter, index) {
-      fragment.appendChild(buildChapter(chapter, index));
+    data.chapters.forEach(function (chapter) {
+      fragment.appendChild(buildChapter(chapter));
     });
     grid.appendChild(fragment);
     tiles = Array.prototype.slice.call(grid.querySelectorAll('.tile'));
@@ -422,14 +386,6 @@
       document.fonts.ready.then(function () { scheduleLayout(false); });
     }
 
-    var expandButton = document.querySelector('[data-book-action="expand"]');
-    var collapseButton = document.querySelector('[data-book-action="collapse"]');
-    var printButton = document.querySelector('[data-book-action="print"]');
-    if (expandButton) expandButton.addEventListener('click', expandAll);
-    if (collapseButton) collapseButton.addEventListener('click', collapseAll);
-    if (printButton) printButton.addEventListener('click', function () { window.print(); });
-
-    if (stats) stats.textContent = strings.stats(data.chapters.length);
     openFromHash(false);
   } else if (grid) {
     var message = document.createElement('p');

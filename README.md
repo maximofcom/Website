@@ -22,7 +22,7 @@ assets/
   js/langs.js              Language registry, language switcher, suggestion banner
   js/data.en.js            English book content (window.BOOK_DATA)
   js/data.ru.js            Russian book content (window.BOOK_DATA)
-  js/app.js                Chapters, tile layout, theme, deep links, toolbar
+  js/app.js                Chapters, tile layout, theme, deep links
   img/favicon.svg          Browser icon
   img/apple-touch-icon.png 180×180 touch icon
   img/icon-192.png         Manifest icon
@@ -112,7 +112,7 @@ The `404.html` page uses `/Website/` paths because GitHub Pages serves it from a
 ## Reading features
 
 - Click a chapter tile to expand it in place; the tile grid reflows around open chapters.
-- “Expand all”, “Collapse all” and “Print / PDF” buttons sit above the chapters. Print styles hide navigation and expand every chapter, so the browser's print dialog can save a clean PDF.
+- Print styles hide navigation and expand every chapter, so the browser's print dialog can save a clean PDF.
 - Chapter tiles are deep-linkable (`#chapter-N`); opening a link expands and scrolls to that chapter.
 - The header height is measured at runtime (`--header-offset`), so anchors are not hidden under the sticky header on mobile.
 - Light and dark themes follow the system preference until the visitor chooses one; the choice is stored in `localStorage` under `theme`.

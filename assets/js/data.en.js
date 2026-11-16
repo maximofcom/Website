@@ -26,7 +26,7 @@ window.BOOK_DATA = {
     },
     {
       "id": "chapter-2",
-      "title": "Do not read books or subtitles if you do not understand a foreign language by ear.",
+      "title": "Do not read books and subtitles if you do not understand a foreign language by ear.",
       "preview": [
         "Books, subtitles are spoken language converted from the auditory system to the visual system.",
         "Written language is one of the ways of compressing and transmitting spoken language, so learning a foreign language in this way is impossible.",
@@ -268,7 +268,7 @@ window.BOOK_DATA = {
     },
     {
       "id": "chapter-8",
-      "title": "All foreign languages are the same in difficulty.",
+      "title": "All foreign languages are the same in complexity.",
       "preview": [
         "Another fantastic effect of my method is that all foreign languages have the same difficulty.",
         "Chinese = English = Russian = Turkish and so on."
@@ -357,14 +357,7 @@ window.BOOK_DATA = {
           "type": "p",
           "text": "Some languages have multiple o's, such as Vietnamese. Or several letters \"s\", as for example in Russian. How to explain the difference between them? The only way out is to watch and listen to a foreign language for a long time.",
           "hl": []
-        }
-      ]
-    },
-    {
-      "id": "chapter-11",
-      "title": "Why learn to write in a foreign language?",
-      "preview": [],
-      "blocks": [
+        },
         {
           "type": "p",
           "text": "Would you like to learn how to repair your car? You rarely need to repair your car, and it takes a long time to learn. Therefore, you prefer to contact a car repair shop. Do you want to learn to write? Can you at least write like an artificial intelligence? No..",
@@ -373,8 +366,8 @@ window.BOOK_DATA = {
       ]
     },
     {
-      "id": "chapter-12",
-      "title": "How much foreign language does a cleaner and translator need?",
+      "id": "chapter-11",
+      "title": "How much foreign language does a cleaning lady and a translator need?",
       "preview": [
         "Do you want to work as a simultaneous interpreter in China or travel around France?",
         "If you want to work in Saudi Arabia or China for a short period of time, then why do you need Arabic or Chinese?",
@@ -404,7 +397,7 @@ window.BOOK_DATA = {
       ]
     },
     {
-      "id": "chapter-13",
+      "id": "chapter-12",
       "title": "Age limit 14+.",
       "preview": [
         "The claim that children learn a foreign language faster than adults is nonsense.",
@@ -419,6 +412,12 @@ window.BOOK_DATA = {
           "hl": [[0,80],[143,228],[344,488]]
         }
       ]
+    },
+    {
+      "id": "chapter-13",
+      "title": "Algorithms for training vocabulary, grammar, listening in a foreign language and speaking in a foreign language.",
+      "preview": [],
+      "blocks": []
     },
     {
       "id": "chapter-14",
@@ -522,17 +521,12 @@ window.BOOK_DATA = {
     },
     {
       "id": "chapter-15",
-      "title": "Level \"Chaos\".",
+      "title": "Chaos level. The first 1-2 months will be very difficult.",
       "preview": [
         "Listen especially carefully to the words in foreign speech that form a grammatical rule, and remember them as one word, a rhyme.",
         "You have to listen to \"5, 6, 2, 2\" for a long time to automate this grammar rule."
       ],
       "blocks": [
-        {
-          "type": "p",
-          "text": "The first 1-2 months will be very difficult.",
-          "hl": []
-        },
         {
           "type": "p",
           "text": "You should choose the easiest TV series to learn foreign languages. At this level, we do not understand where the beginning and end of words in foreign speech are. If you understand a little dialogue in a television series, then be sure to continue watching the television series, no need to look up all the words you don’t understand in the dictionary. If you do not understand the dialogue, then rewind the video 1-2-3 times. Divide long dialogues into 1-2 second segments, for example, where the actor paused or took a breath. Next is the following algorithm:",
@@ -602,17 +596,12 @@ window.BOOK_DATA = {
     },
     {
       "id": "chapter-16",
-      "title": "The hardest part is over!",
+      "title": "The hardest part is over! We are trying to speak a foreign language.",
       "preview": [
         "If you do not understand foreign language at the level you want to speak, you will need to continue learning vocabulary and grammar.",
         "At the beginning you should speak without endings of nouns, verb tenses, idioms."
       ],
       "blocks": [
-        {
-          "type": "p",
-          "text": "We are trying to speak a foreign language.",
-          "hl": []
-        },
         {
           "type": "p",
           "text": "If you think that you have enough level to watch simple TV series, then just watch TV series for 1-2 hours a day to maintain a foreign language in your memory. Thus, within 1-2 years, you will reach a level of understanding of television channels. But if you want to quickly reach the highest level, then let's change the algorithm a little.",
@@ -687,14 +676,9 @@ window.BOOK_DATA = {
     },
     {
       "id": "chapter-17",
-      "title": "Congratulations!",
+      "title": "Congratulations! You are now a native speaker. Listening to foreign speech and speaking a foreign language is processed by your brain without the participation of your conscious mind.",
       "preview": [],
       "blocks": [
-        {
-          "type": "p",
-          "text": "You are now a native speaker. Listening to foreign speech and speaking a foreign language is processed by your brain without the participation of your conscious mind.",
-          "hl": []
-        },
         {
           "type": "p",
           "text": "When you get to the level of difficult TV series, you don't separate TV series for grammar and TV series for vocabulary. Watch TV series at maximum speed, try to pause less to watch as many TV series as possible. But you have to understand most of the dialogue in a TV series to be interested. Remember only the most frequent foreign words in dialogues every 2-5 minutes and analyze the grammar of unclear sentences in a television series every 3-10 minutes. Constantly speed up, try to make fewer stops...",
